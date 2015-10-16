@@ -1,0 +1,19 @@
+html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	
+}
+
+#todo {
+	border-bottom: solid 2px black;
+	width: 200px;
+}
+
+.content {
+	width: 70%;
+	margin: 0 auto;
+	border: dotted 4px silver;
+}

@@ -1,0 +1,111 @@
+<html >
+  <head>
+    <meta charset="utf-8">
+    <title>Angular.js Example</title>
+  <link rel="stylesheet" media="screen" href="main.css"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.27/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.9/ngStorage.js"></script>
+
+    <script>
+       var example = angular.module("example", ["ngStorage"]);
+            example.controller("ExampleController", function($scope, $localStorage) {
+
+              $localStorage.todoArray;
+              $localStorage.completedArray;
+              $scope.todo = $localStorage.todoArray;
+              $scope.completed = $localStorage.completedArray;
+ 
+                $scope.save = function() {
+                    if($scope.enteredValue == null || $scope.enteredValue == "")
+                    {
+                      //Does Nothing
+                    }
+                    else
+                    {
+                      $localStorage.todoArray.push($scope.enteredValue);
+                      $scope.data = $localStorage.todoArray;
+                      $scope.todo = $localStorage.todoArray;
+                      $scope.count();
+                    }
+                }
+ 
+                $scope.loadTodo = function() {
+                    $scope.data = $localStorage.todoArray;
+                }
+
+                $scope.erase = function() {
+                  $localStorage.todoArray = [];
+                  $localStorage.completedArray = [];
+                  $scope.todo = $localStorage.todoArray;
+                  $scope.completed = $localStorage.completedArray;
+                  $scope.count();
+                }
+
+                $scope.deleter = function(name) {
+                  var i = $scope.todo.indexOf(name);
+                  $localStorage.todoArray.splice(i, 1);
+                  $scope.todo = $localStorage.todoArray;
+                  $scope.count();
+                }
+
+                $scope.deleter2 = function(name) {
+                  var i = $scope.completed.indexOf(name);
+                  $localStorage.completedArray.splice(i, 1);
+                  $scope.completed = $localStorage.completedArray;
+                  $scope.count();
+                }
+
+                $scope.complete = function(name) {
+                  $scope.deleter(name);
+                  $localStorage.completedArray.push(name);
+                  $scope.completed = $localStorage.completedArray;
+                  $scope.count();
+                }
+
+                $scope.uncomplete = function(name) {
+                  $scope.deleter2(name);
+                  $localStorage.todoArray.push(name);
+                  $scope.todo = $localStorage.todoArray;
+                  $scope.count();
+                }
+
+                $scope.count = function() {
+                  return $localStorage.todoArray.length;
+                }
+ 
+            });
+    </script>
+
+  </head>
+  <body ng-app="example">
+    <div class="content">
+        <div ng-controller="ExampleController">
+            <input type="text" ng-model="enteredValue">
+            <button ng-click="save()">Add Todo</button>
+            <!-- <button ng-click="load()">Load</button> -->
+            <button ng-click="erase()">Erase Everything</button>
+            <br>
+            <div id="todo">
+              TODO:{{count()}}
+            </div>
+            <br>
+              <ul>
+                <li ng-repeat="data in todo track by data">
+                  <button ng-click="complete(data)">Completed</button>{{data}}
+                  <button ng-click="deleter(data)">Delete</button>
+                </li>
+              </ul>
+              COMPLETED
+              <br>
+              <ul>
+                <li ng-repeat="data in completed track by data">
+                  <button ng-click="uncomplete(data)">Not Completed</button>
+                  {{data}}
+                  <button ng-click="deleter2(data)">Delete</button>
+                </li>
+              </ul>
+        </div>
+        </div><!--content-->
+    </body>
+
+</html>
